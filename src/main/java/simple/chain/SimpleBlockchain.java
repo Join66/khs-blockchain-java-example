@@ -73,7 +73,7 @@ public class SimpleBlockchain<T extends Tx> {
 		String previousHash = "root";
 
 		if (count > 0)
-			previousHash = blockChainHash();
+			previousHash = blockChainHash(); // 当前区块的上一个区块hash
 
 		Block<T> block = new Block<T>();
 
@@ -87,15 +87,15 @@ public class SimpleBlockchain<T extends Tx> {
 
 		if (chain.size() == 0) {
 			// genesis block
-			this.chain.add(newBlock());
+			this.chain.add(newBlock()); // 区块为0 则第一个区块需要为创世区块
 		}
 
 		// See if head block is full
-		if (getHead().getTransactions().size() >= BLOCK_SIZE) {
-			this.chain.add(newBlock());
+		if (getHead().getTransactions().size() >= BLOCK_SIZE) { // head即最新区块（不包括还未生成的区块）
+			this.chain.add(newBlock()); // 交易数超过"BLOCK_SIZE",生成新的区块
 		}
 
-		getHead().add(item);
+		getHead().add(item); // 如果交易数超过"BLOCK_SIZE"，则将新的交易放入新的区块中
 
 		return this;
 	}
@@ -111,7 +111,7 @@ public class SimpleBlockchain<T extends Tx> {
 	public SimpleBlockchain<T> Clone() {
 		List<Block<T>> clonedChain = new ArrayList<Block<T>>();
 		Consumer<Block> consumer = (b) -> clonedChain.add(b.Clone());
-		chain.forEach(consumer);
+		chain.forEach(consumer); // 防止调用者修改后，被克隆者跟着修改
 		return new SimpleBlockchain<T>(clonedChain);
 	}
 

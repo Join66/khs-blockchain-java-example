@@ -2,7 +2,9 @@ package simple.chain;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.junit.Test;
 
@@ -11,9 +13,9 @@ public class SimpleChainTest {
 	@Test
 	public void testBlockchain() {
 
-		SimpleBlockchain<Transaction> chain1 = new SimpleBlockchain<Transaction>();
+		SimpleBlockchain<Transaction> chain1 = new SimpleBlockchain<Transaction>(); // chain1.chain包含创世区块，注意创世区块的生成逻辑(未添加交易时有previousHash 无hash)
 
-		chain1.add(new Transaction("A")).add(new Transaction("B")).add(new Transaction("C"));
+		chain1.add(new Transaction("A")).add(new Transaction("B")).add(new Transaction("C")); // 添加交易会重新生成hash和mekleRoot
 
 		SimpleBlockchain<Transaction> chain2 = chain1.Clone();
 
@@ -124,4 +126,24 @@ public class SimpleChainTest {
 	
 	}
 
+	@Test
+	public void testChange() {
+		List l1 = new ArrayList<String>();
+		l1.add("a");
+		l1.add("b");
+		l1.add("c");
+		List l2 = l1;
+		l1.add("d");
+		l2.add("e");
+		System.out.println(l1);
+		System.out.println(l2);
+
+		List l3 = new ArrayList<String>();
+		Consumer<String> consumer = (s) -> l3.add(s) ;
+		l1.forEach(consumer);
+		l1.add("g");
+		l3.add("h");
+		System.out.println(l1);
+		System.out.println(l3);
+	}
 }
